@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 
 import './App.css'
+import { GameCanvas } from './components/GameCanvas'
 
 type User = {
   id: number
@@ -207,107 +208,140 @@ function App() {
   }
 
   return (
-    <main className="shell">
-      <section className="hero-panel">
-        <p className="eyebrow">SpacioPixel</p>
-        <h1>Habbo-style social rooms, scaffolded and ready to build.</h1>
-        <p className="lede">
-          The stack is live. You can authenticate against Laravel and manage the
-          first room data from this web client.
-        </p>
-      </section>
+    <main className="shell game-shell">
+      <section className="client-shell">
+        <div className="client-topbar">
+          <div>
+            <p className="eyebrow">SpacioPixel Hotel</p>
+            <h1>{user ? 'Lobby Client' : 'Enter The Hotel'}</h1>
+          </div>
 
-      {error ? <p className="notice error">{error}</p> : null}
+          <div className="topbar-meta">
+            <span className="status-dot" />
+            <span>{user ? `${user.username} online` : 'guest session'}</span>
+          </div>
+        </div>
 
-      <section className="status-grid app-grid">
-        <article className="card auth-card">
-          <div className="section-header">
-            <h2>{user ? 'Signed In' : authMode === 'register' ? 'Create Account' : 'Login'}</h2>
+        <div className="client-stage">
+          <GameCanvas authMode={authMode} rooms={rooms} user={user} />
+
+          <div className="hud hud-left">
             {!user ? (
-              <button className="ghost-button" onClick={() => setAuthMode(authMode === 'register' ? 'login' : 'register')}>
-                Switch to {authMode === 'register' ? 'login' : 'register'}
-              </button>
-            ) : null}
-          </div>
+              <article className="panel auth-panel">
+                <div className="section-header compact">
+                  <div>
+                    <h2>{authMode === 'register' ? 'Create Avatar' : 'Login'}</h2>
+                    <p className="muted small-copy">
+                      {authMode === 'register'
+                        ? 'Pick a name and step into the lobby.'
+                        : 'Use your hotel account to continue.'}
+                    </p>
+                  </div>
 
-          {isLoading ? <p>Loading session...</p> : null}
-
-          {!user ? (
-            <form className="stack" onSubmit={handleAuthSubmit}>
-              <label>
-                <span>Email</span>
-                <input name="email" type="email" required />
-              </label>
-
-              {authMode === 'register' ? (
-                <label>
-                  <span>Username</span>
-                  <input name="username" type="text" minLength={3} maxLength={24} required />
-                </label>
-              ) : null}
-
-              <label>
-                <span>Password</span>
-                <input name="password" type="password" minLength={8} required />
-              </label>
-
-              {authMode === 'register' ? (
-                <label>
-                  <span>Confirm Password</span>
-                  <input name="passwordConfirmation" type="password" minLength={8} required />
-                </label>
-              ) : null}
-
-              <button className="primary-button" disabled={authPending} type="submit">
-                {authPending ? 'Working...' : authMode === 'register' ? 'Register' : 'Login'}
-              </button>
-            </form>
-          ) : (
-            <div className="stack">
-              <p><strong>{user.username}</strong></p>
-              <p>{user.email}</p>
-              <button className="ghost-button" onClick={handleLogout} type="button">
-                Logout
-              </button>
-            </div>
-          )}
-        </article>
-
-        <article className="card">
-          <div className="section-header">
-            <h2>Lobby Rooms</h2>
-            <span className="pill">{rooms.length} rooms</span>
-          </div>
-
-          <div className="room-list">
-            {rooms.map((room) => (
-              <div className="room-row" key={room.id}>
-                <div>
-                  <strong>{room.name}</strong>
-                  <p>
-                    {room.width}x{room.height} tiles · max {room.max_users}
-                  </p>
+                  <button
+                    className="ghost-button"
+                    onClick={() => setAuthMode(authMode === 'register' ? 'login' : 'register')}
+                    type="button"
+                  >
+                    {authMode === 'register' ? 'Have an account?' : 'Need an account?'}
+                  </button>
                 </div>
-                <span className="pill">{room.is_lobby ? 'Lobby' : 'Room'}</span>
-              </div>
-            ))}
+
+                {isLoading ? <p className="muted">Loading session...</p> : null}
+
+                <form className="stack" onSubmit={handleAuthSubmit}>
+                  <label>
+                    <span>Email</span>
+                    <input name="email" type="email" required />
+                  </label>
+
+                  {authMode === 'register' ? (
+                    <label>
+                      <span>Username</span>
+                      <input name="username" type="text" minLength={3} maxLength={24} required />
+                    </label>
+                  ) : null}
+
+                  <label>
+                    <span>Password</span>
+                    <input name="password" type="password" minLength={8} required />
+                  </label>
+
+                  {authMode === 'register' ? (
+                    <label>
+                      <span>Confirm Password</span>
+                      <input name="passwordConfirmation" type="password" minLength={8} required />
+                    </label>
+                  ) : null}
+
+                  <button className="primary-button" disabled={authPending} type="submit">
+                    {authPending ? 'Connecting...' : authMode === 'register' ? 'Enter hotel' : 'Login'}
+                  </button>
+                </form>
+              </article>
+            ) : (
+              <article className="panel auth-panel profile-panel">
+                <div className="section-header compact">
+                  <div>
+                    <h2>{user.username}</h2>
+                    <p className="muted small-copy">{user.email}</p>
+                  </div>
+
+                  <button className="ghost-button" onClick={handleLogout} type="button">
+                    Exit hotel
+                  </button>
+                </div>
+
+                <p className="muted">
+                  Your client is authenticated. Next step is to join a live Colyseus room and render presence.
+                </p>
+              </article>
+            )}
+
+            {error ? <p className="notice error">{error}</p> : null}
           </div>
 
-          {user ? (
-            <form className="stack create-room" onSubmit={handleCreateRoom}>
-              <label>
-                <span>Create Room</span>
-                <input name="name" type="text" minLength={3} maxLength={40} placeholder="Pixel Loft" required />
-              </label>
+          <div className="hud hud-right">
+            <article className="panel rooms-panel">
+              <div className="section-header compact">
+                <div>
+                  <h2>Room Navigator</h2>
+                  <p className="muted small-copy">{rooms.length} rooms indexed</p>
+                </div>
+                <span className="pill">Lobby</span>
+              </div>
 
-              <button className="primary-button" disabled={roomPending} type="submit">
-                {roomPending ? 'Creating...' : 'Create Room'}
-              </button>
-            </form>
-          ) : (
-            <p className="muted">Sign in to create rooms.</p>
-          )}
-        </article>
+              <div className="room-list">
+                {rooms.map((room) => (
+                  <div className="room-row" key={room.id}>
+                    <div>
+                      <strong>{room.name}</strong>
+                      <p>
+                        {room.width}x{room.height} tiles · max {room.max_users}
+                      </p>
+                    </div>
+                    <span className="pill">{room.is_lobby ? 'Public' : 'Private'}</span>
+                  </div>
+                ))}
+              </div>
+
+              {user ? (
+                <form className="stack create-room" onSubmit={handleCreateRoom}>
+                  <label>
+                    <span>Create Room</span>
+                    <input name="name" type="text" minLength={3} maxLength={40} placeholder="Sky Lounge" required />
+                  </label>
+
+                  <button className="primary-button" disabled={roomPending} type="submit">
+                    {roomPending ? 'Building...' : 'Build Room'}
+                  </button>
+                </form>
+              ) : (
+                <p className="muted">Register inside the client to create your own room.</p>
+              )}
+            </article>
+          </div>
+        </div>
       </section>
     </main>
   )
