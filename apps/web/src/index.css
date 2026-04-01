@@ -4,6 +4,7 @@
   --border: rgba(160, 174, 208, 0.2);
   --text: #c9d4f0;
   --text-strong: #f4f7ff;
+  --muted: #91a1c7;
   --accent: #7dd3fc;
   --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   color: var(--text);
