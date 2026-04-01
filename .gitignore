@@ -1,0 +1,17 @@
+.DS_Store
+.env
+.env.*.local
+node_modules/
+
+/apps/api/vendor/
+/apps/api/storage/*.key
+/apps/api/bootstrap/cache/*.php
+/apps/api/database/*.sqlite
+
+/apps/web/node_modules/
+/apps/web/dist/
+
+/apps/realtime/node_modules/
+/apps/realtime/dist/
+
+/packages/*/node_modules/
