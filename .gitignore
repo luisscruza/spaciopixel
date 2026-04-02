@@ -15,3 +15,5 @@ node_modules/
 /apps/realtime/dist/
 
 /packages/*/node_modules/
+.playwright-mcp
+/*.png

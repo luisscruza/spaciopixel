@@ -75,11 +75,56 @@
   align-items: end;
 }
 
-.hud-right {
-  right: 1rem;
-  display: flex;
-  align-items: start;
-  justify-content: end;
+.compact-hud {
+  width: min(24rem, calc(100% - 5.5rem));
+}
+
+.sidebar-rail {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  display: grid;
+  gap: 0.65rem;
+  z-index: 3;
+}
+
+.rail-button {
+  width: 4rem;
+  min-height: 4rem;
+  border: 1px solid rgba(166, 185, 224, 0.18);
+  background: rgba(10, 16, 32, 0.82);
+  backdrop-filter: blur(16px);
+  color: var(--text-strong);
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  gap: 0.2rem;
+  padding: 0.45rem;
+  cursor: pointer;
+}
+
+.rail-button.active {
+  border-color: rgba(125, 211, 252, 0.45);
+  background: rgba(17, 33, 58, 0.92);
+}
+
+.rail-icon {
+  display: grid;
+  place-items: center;
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 999px;
+  background: rgba(125, 211, 252, 0.12);
+  color: #bdeafe;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.rail-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
 }
 
 .panel {
@@ -98,11 +143,18 @@
 }
 
 .rooms-panel {
-  max-width: 24rem;
+  max-width: 22rem;
 }
 
 .profile-panel {
   align-self: end;
+}
+
+.mini-stats {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+  flex-wrap: wrap;
 }
 
 .section-header {
@@ -196,6 +248,22 @@
   border-top: 1px solid rgba(160, 174, 208, 0.12);
 }
 
+.room-row-button {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  border-top: 1px solid rgba(160, 174, 208, 0.12);
+  color: inherit;
+  cursor: pointer;
+}
+
+.room-row-button.active {
+  background: rgba(125, 211, 252, 0.05);
+}
+
 .room-row:first-child {
   padding-top: 0;
   border-top: none;
@@ -239,22 +307,15 @@
     width: calc(100% - 2rem);
   }
 
-  .hud-left,
-  .hud-right {
-    left: 1rem;
+  .hud-left {
+    left: 5.5rem;
     right: 1rem;
     width: auto;
   }
 
   .hud-left {
     top: auto;
-    bottom: 15rem;
-  }
-
-  .hud-right {
-    top: auto;
     bottom: 1rem;
-    justify-content: stretch;
   }
 
   .rooms-panel,
@@ -285,6 +346,12 @@
 
   .panel {
     border-radius: 18px;
+  }
+
+  .sidebar-rail {
+    top: auto;
+    bottom: 1rem;
+    left: 1rem;
   }
 
   .section-header {

@@ -42,6 +42,7 @@ services:
       REDIS_CLIENT: predis
       REDIS_HOST: redis
       REDIS_PORT: 6379
+      REALTIME_TOKEN_SECRET: base64:fx3Bl54fIaKGpJ3Ht1olG13x/Det8GMvyGRzIlHNrfM=
       SESSION_DRIVER: database
       CACHE_STORE: redis
       QUEUE_CONNECTION: redis
@@ -67,6 +68,8 @@ services:
       API_URL: http://api:8000
       REDIS_HOST: redis
       REDIS_PORT: 6379
+      REALTIME_TOKEN_SECRET: base64:fx3Bl54fIaKGpJ3Ht1olG13x/Det8GMvyGRzIlHNrfM=
+      MOVEMENT_MS_PER_TILE: 200
     volumes:
       - ./apps/realtime:/app
       - realtime-node-modules:/app/node_modules
